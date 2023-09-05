@@ -16,9 +16,11 @@ Note : The plugin is not available on the JetBrains plugin repository yet.
 
 ## Installation...
 
-### ...from the JetBrains Plugin Repository (this is what you want to do)
+### ...from the JetBrains Plugin Repository (need to do it manually)
 
-*Not available yet*
+Go to `Setting` -> `Plugin` -> `Manage Plugin Repositories...` click add button and paste
+`https://github.com/Azn9/JetBrains-Discord-Integration/raw/master/update.xml`.
+after this you can search it in Marketplace just like normal plugin.
 
 #### ...from the GitHub release page
 
