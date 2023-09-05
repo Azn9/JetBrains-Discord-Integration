@@ -7,7 +7,19 @@
     version="2.0.1">
     <idea-version since-build="232.0" />
     <name>Discord Integration v2</name>
-    <description>Discord Integration v2</description>
+    <description><![CDATA[
+    Discord Integration v2
+    <h1>Notice</h1>
+    <br>
+This repo is a fork of the original JetBrains Discord Integration plugin, as its owner has been inactive for a while. I will try to keep it up to date with the latest versions of discord and jetbrains IDEs, and fix any issues that may arise.<br>
+Feel free to open an issue if you have any problems with the plugin, or if you have any suggestions.<br>
+Feel free to open a pull request if you want to contribute to the project.<br>
+<br>
+Note : The plugin is not available on the JetBrains plugin repository yet.
+]]></description>
+    <change-notes><![CDATA[
+    visit <a href="https://github.com/Azn9/JetBrains-Discord-Integration/releases/tag/v2.0.1">GitHub</a> for chang log
+    ]]></change-notes>
   </plugin>
 
 </plugins>
