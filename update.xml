@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugins>
+  <plugin
+    id="com.almightyalpaca.intellij.plugins.discord"
+    url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.1/JetBrains-Discord-Integration-2.0.1.zip"
+    version="2.0.1">
+    <idea-version since-build="232.0" />
+    <name>Discord Integration v2</name>
+    <description>Discord Integration v2</description>
+  </plugin>
+
+</plugins>
