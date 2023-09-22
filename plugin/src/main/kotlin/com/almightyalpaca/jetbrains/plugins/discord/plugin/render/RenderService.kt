@@ -52,7 +52,7 @@ class RenderService : DisposableCoroutineScope {
         }
 
         renderJob = launch {
-            DiscordPlugin.LOG.info("Scheduling render, force=$force")
+            DiscordPlugin.LOG.debug("Scheduling render, force=$force")
 
             val data = dataService.getData(Renderer.Mode.NORMAL) ?: return@launch
 
@@ -62,9 +62,9 @@ class RenderService : DisposableCoroutineScope {
             val presence = renderer?.render()
 
             if (presence == null) {
-                DiscordPlugin.LOG.info("Render result: visible")
+                DiscordPlugin.LOG.debug("Render result: hidden")
             } else {
-                DiscordPlugin.LOG.info("Render result: hidden")
+                DiscordPlugin.LOG.debug("Render result: visible")
             }
 
             rpcService.update(presence, force)
