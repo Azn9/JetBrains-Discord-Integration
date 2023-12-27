@@ -31,7 +31,7 @@ intellij-pre231 = "1.16.1"
 intellij-post231 = "1.16.1"
 
 kotlin-latest = "1.9.22"
-kotlin-common = "1.7.0"
+kotlin-common = "1.9.22"
 kotlin-pre223 = "1.7.0"
 kotlin-pre231 = "1.9.22"
 kotlin-post231 = "1.9.22"
