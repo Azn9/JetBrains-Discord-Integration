@@ -19,8 +19,8 @@ Note : The plugin is not available on the JetBrains plugin repository yet.
 ### ...from the JetBrains Plugin Repository (need to do it manually)
 
 Go to `Setting` -> `Plugin` -> `Manage Plugin Repositories...` click add button and paste
-`https://github.com/Azn9/JetBrains-Discord-Integration/raw/master/update.xml`.
-after this you can search it in Marketplace just like normal plugin.
+`https://github.com/Azn9/JetBrains-Discord-Integration/raw/develop/update.xml`.
+after this you can search it in Marketplace just like normal plugin. It will be named `Discord Integration v2` as a separate plugin.
 
 #### ...from the GitHub release page
 
