@@ -28,11 +28,11 @@ ide-v223 = "2022.3.3" # Uses Java 17
 ide-v231 = "2023.1.5" # New postLoad system
 ide-v232 = "2023.2.4" # New idle listener system
 
-intellij-common = "1.16.1"
-intellij-v212 = "1.16.1"
-intellij-v223 = "1.16.1"
-intellij-v231 = "1.16.1"
-intellij-v232 = "1.16.1"
+intellij-common = "1.17.1"
+intellij-v212 = "1.17.1"
+intellij-v223 = "1.17.1"
+intellij-v231 = "1.17.1"
+intellij-v232 = "1.17.1"
 
 kotlin-latest = "1.9.22"
 kotlin-common = "1.7.0"
