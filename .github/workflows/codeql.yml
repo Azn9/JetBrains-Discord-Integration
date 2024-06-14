@@ -27,7 +27,7 @@ jobs:
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: 'java-kotlin'
 
@@ -41,9 +41,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v3
     - name: Build with Gradle
-      run: ./gradlew build --no-daemon --debug
+      run: ./gradlew build --no-daemon
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
