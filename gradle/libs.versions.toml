@@ -20,7 +20,7 @@ okhttp3 = "4.12.0"
 pngtastic = "1.7"
 shadow = "8.1.1"
 versions = "0.51.0"
-zeroAllocationHashing = "0.16"
+zeroAllocationHashing = "0.26ea0"
 
 ide-common = "2021.2" # Lower bound for all IDE versions
 ide-v212 = "2021.2" # Uses Java 11
