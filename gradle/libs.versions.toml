@@ -1,6 +1,6 @@
 [versions]
 antlr = "4.13.1"
-commons-io = "2.15.1"
+commons-io = "2.16.1"
 commons-lang = "3.14.0"
 commons-text = "1.11.0"
 discord-ipc = "0.2.4"
