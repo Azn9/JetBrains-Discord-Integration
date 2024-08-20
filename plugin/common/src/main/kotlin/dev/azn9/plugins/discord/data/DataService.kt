@@ -17,7 +17,6 @@
 
 package dev.azn9.plugins.discord.data
 
-import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ex.ApplicationInfoEx
 import com.intellij.openapi.application.runReadAction
