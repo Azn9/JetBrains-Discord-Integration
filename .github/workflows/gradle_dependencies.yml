@@ -26,5 +26,6 @@ jobs:
             :plugin:v223
             :plugin:v231
             :plugin:v232
+            :plugin:v242
           gradle-build-configuration: |-
             compileClasspath
