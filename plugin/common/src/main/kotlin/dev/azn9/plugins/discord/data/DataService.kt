@@ -106,7 +106,7 @@ class DataService {
                 return Data.None
             }
 
-            if (applicationCode == "JBC") {
+            if (applicationCode == "JBC" || applicationCode == "JBC_s") {
                 applicationCode = ApplicationType.IDE_EDITION.applicationName
             }
 

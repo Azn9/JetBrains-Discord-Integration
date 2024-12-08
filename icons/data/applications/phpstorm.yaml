@@ -2,6 +2,7 @@
 ids:
   - PS
   - PS_s
+  - phpstorm
   - phpstorm_s
 discordId: 1274043828118098022
 dummyFile: Main.php
