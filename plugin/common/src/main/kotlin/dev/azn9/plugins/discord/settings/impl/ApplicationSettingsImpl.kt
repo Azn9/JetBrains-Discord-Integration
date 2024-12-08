@@ -71,11 +71,11 @@ class ApplicationSettingsImpl : ApplicationSettings, PersistentStateOptionHolder
     override val applicationIconLargeTextCustom by applicationIconLargeTextToggle.option.template("Custom", "")
 
     private val applicationIconSmallToggle by applicationTab.toggleable<PresenceIcon>()
-    override val applicationIconSmall by applicationIconSmallToggle.enableOn(PresenceIcon.CUSTOM).selection("Large icon", PresenceIcon.Large.Application)
+    override val applicationIconSmall by applicationIconSmallToggle.enableOn(PresenceIcon.CUSTOM).selection("Small icon", PresenceIcon.Large.Application)
     override val applicationIconSmallCustom by applicationIconSmallToggle.option.template("Custom", "")
 
     private val applicationIconSmallTextToggle by applicationTab.toggleable<PresenceText>()
-    override val applicationIconSmallText by applicationIconSmallTextToggle.enableOn(PresenceText.CUSTOM).selection("Large icon text", PresenceText.ApplicationIconSmall)
+    override val applicationIconSmallText by applicationIconSmallTextToggle.enableOn(PresenceText.CUSTOM).selection("Small icon text", PresenceText.ApplicationIconSmall)
     override val applicationIconSmallTextCustom by applicationIconSmallTextToggle.option.template("Custom", "")
 
     override val applicationTime by applicationTab.selection("Show elapsed time", PresenceTime.Application)
@@ -102,11 +102,11 @@ class ApplicationSettingsImpl : ApplicationSettings, PersistentStateOptionHolder
     override val projectIconLargeTextCustom by projectIconLargeTextToggle.option.template("Custom", "")
 
     private val projectIconSmallToggle by projectTab.toggleable<PresenceIcon>()
-    override val projectIconSmall by projectIconSmallToggle.enableOn(PresenceIcon.CUSTOM).selection("Large icon", PresenceIcon.Large.Project)
+    override val projectIconSmall by projectIconSmallToggle.enableOn(PresenceIcon.CUSTOM).selection("Small icon", PresenceIcon.Large.Project)
     override val projectIconSmallCustom by projectIconSmallToggle.option.template("Custom", "")
 
     private val projectIconSmallTextToggle by projectTab.toggleable<PresenceText>()
-    override val projectIconSmallText by projectIconSmallTextToggle.enableOn(PresenceText.CUSTOM).selection("Large icon text", PresenceText.ProjectIconSmall)
+    override val projectIconSmallText by projectIconSmallTextToggle.enableOn(PresenceText.CUSTOM).selection("Small icon text", PresenceText.ProjectIconSmall)
     override val projectIconSmallTextCustom by projectIconSmallTextToggle.option.template("Custom", "")
 
     override val projectTime by projectTab.selection("Show elapsed time", PresenceTime.Project)
