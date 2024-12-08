@@ -1,3 +1,11 @@
+## v2.1.5
+- Add avalonia (.axml) support and icons for themes classic, flat, and material
+- Fix a typo in the settings where "Large icon" is written instead of "Small icon"
+- Fix an issue with JetBrains Client when using version without edition mode
+- Fix an issue with phpstorm due to a missing identifier
+- Fix an incorrect browser detection leading to false-positive warnings
+- Fix some other issues
+
 ## v2.1.4
 - Lower the java version on 242 plugin versions as some IDE still use java 17
 - Add detection for custom discord client such as Vesktop
