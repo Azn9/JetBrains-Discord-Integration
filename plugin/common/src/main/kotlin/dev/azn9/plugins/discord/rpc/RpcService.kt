@@ -97,15 +97,16 @@ class RpcService : DisposableCoroutineScope {
                             else -> DiscordPlugin.LOG.debug("Reconnecting to client due to changed appId")
                         }
 
-                        if (connection != null) {
+                         val localConnection = connection
+                        if (localConnection != null) {
                             try {
-                                connection!!.clearActivity()
+                                localConnection.clearActivity()
                             } catch (e: Exception) {
                                 DiscordPlugin.LOG.warnLazy(e) { "Error clearing activity" }
                             }
 
-                            connection!!.disconnect()
-                            Disposer.dispose(connection!!)
+                            localConnection.disconnect()
+                            Disposer.dispose(localConnection)
                             connection = null
                         }
 
