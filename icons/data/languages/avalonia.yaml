@@ -1,0 +1,6 @@
+name: Avalonia
+asset: avalonia
+parent: xml
+match:
+  extension:
+    equals: .axml
