@@ -1,3 +1,6 @@
+## v2.1.6
+- Fix presence no longer showing after a recent Discord update
+
 ## v2.1.5
 - Add avalonia (.axml) support and icons for themes classic, flat, and material
 - Fix a typo in the settings where "Large icon" is written instead of "Small icon"
