@@ -87,4 +87,7 @@ interface ApplicationSettings : PersistentStateComponent<Element>, OptionHolder 
     val iconsTheme: ThemeValue
 
     val applicationLastUpdateNotification: StringValue
+
+    val discordOauthToken: StringValue
+    val discordRefreshToken: StringValue
 }

@@ -53,7 +53,7 @@ class RpcService : DisposableCoroutineScope {
         DiscordPlugin.LOG.warnLazy(error) { "Error while updating presence" }
     }
 
-    private fun updateUser(user: User?) {
+    fun updateUser(user: User?) {
         _user = user
     }
 

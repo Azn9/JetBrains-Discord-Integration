@@ -158,4 +158,6 @@ class ApplicationSettingsImpl : ApplicationSettings, PersistentStateOptionHolder
     private val hidden by hidden()
 
     override val applicationLastUpdateNotification by hidden.text("<unused>", "")
+    override val discordOauthToken by hidden.text("", "")
+    override val discordRefreshToken by hidden.text("", "")
 }

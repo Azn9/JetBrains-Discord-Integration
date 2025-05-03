@@ -68,6 +68,9 @@
         <postStartupActivity implementation="dev.azn9.plugins.discord.postLoad.RenderPreloadingActivity"/>
 
         <errorHandler implementation="dev.azn9.plugins.discord.errorreporting.ErrorReporting"/>
+
+        <toolWindow id="Discord connection" secondary="true" icon="AllIcons.Toolwindows.WebToolWindow" anchor="right"
+                    factoryClass="dev.azn9.plugins.discord.toolWindow.DiscordConnectionToolWindowFactory"/>
     </extensions>
 
     <actions>
