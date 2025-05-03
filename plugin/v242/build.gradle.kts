@@ -85,7 +85,7 @@ sourceSets {
     }
 }
 
-val isCI by lazy { System.getenv("CI") != null }
+val isCI = System.getenv("CI") != null
 
 intellijPlatform {
     pluginConfiguration {
@@ -100,6 +100,12 @@ intellijPlatform {
     pluginVerification {
         ides {
             recommended()
+        }
+    }
+
+    idea {
+        module {
+            isDownloadSources = !isCI
         }
     }
 

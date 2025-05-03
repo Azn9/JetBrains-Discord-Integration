@@ -18,7 +18,10 @@
 package dev.azn9.plugins.discord.settings.gui.preview
 
 import dev.azn9.plugins.discord.render.Renderer
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.awt.event.HierarchyEvent
 import javax.swing.ImageIcon
 import javax.swing.JLabel
@@ -29,6 +32,7 @@ class JPreview : JLabel() {
     private val preview = PreviewRenderer()
 
     private val worker = Timer(100) { update() }
+    private val mutex = Mutex()
 
     var type: Renderer.Type.Application = Renderer.Type.Application
         set(value) {
@@ -56,11 +60,17 @@ class JPreview : JLabel() {
 
     @Synchronized
     fun update(force: Boolean = false) {
-        if (isShowing) {
-            val (modified, image) = runBlocking { preview.draw(type, force) }
+        runBlocking { // Try to work around #239
+            mutex.withLock {
+                if (isShowing) {
+                    launch {
+                        val (modified, image) = preview.draw(type, force)
 
-            if (modified) {
-                icon = ImageIcon(image)
+                        if (modified) {
+                            icon = ImageIcon(image)
+                        }
+                    }
+                }
             }
         }
     }

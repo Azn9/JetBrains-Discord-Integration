@@ -17,22 +17,29 @@
 
 package dev.azn9.plugins.discord.settings.impl
 
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
+import com.intellij.util.IncorrectOperationException
 import dev.azn9.plugins.discord.settings.ProjectSettings
 import dev.azn9.plugins.discord.settings.options.impl.PersistentStateOptionHolderImpl
 import dev.azn9.plugins.discord.settings.options.types.*
 import dev.azn9.plugins.discord.settings.settings
 import dev.azn9.plugins.discord.settings.values.ProjectShow
-import com.intellij.openapi.components.State
-import com.intellij.openapi.components.Storage
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.ProjectManager
 import dev.azn9.plugins.discord.settings.values.ThemeType
 
 @State(name = "DiscordProjectSettings", storages = [Storage("discord.xml")])
 class ProjectSettingsImpl(override val project: Project) : ProjectSettings, PersistentStateOptionHolderImpl() {
     override val show by when (project.isDefault) {
         true -> selection("Project visibility", ProjectShow.ASK to ProjectShow.VALUES_DEFAULT)
-        false -> selection("Project visibility", ProjectManager.getInstance().defaultProject.settings.show.getStoredValue() to ProjectShow.VALUES)
+        false -> selection(
+            "Project visibility", try {
+                ProjectManager.getInstance().defaultProject.settings.show.getStoredValue()
+            } catch (e: IncorrectOperationException) { // Work around #246
+                ProjectShow.ASK
+            } to ProjectShow.VALUES
+        )
     }
 
     private val nameOverrideToggle by toggleable<Boolean>()
