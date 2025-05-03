@@ -1,3 +1,7 @@
+## v2.1.7
+- Fix small issues that raise errors without being real errors
+- Fix the webstorm icon not showing with the "macos" icons theme
+
 ## v2.1.6
 - Fix presence no longer showing after a recent Discord update
 
