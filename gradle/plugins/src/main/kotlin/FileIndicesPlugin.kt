@@ -82,6 +82,11 @@ open class GenerateFileIndices : DefaultTask() {
         for (resourceDir in resourceDirs.get().srcDirs) {
             val resourcePath = resourceDir.toPath()
 
+            if (!resourceDir.exists()) {
+                logger.info("$resourceDir does not exist. Creating it.")
+                resourceDir.mkdirs()
+            }
+
             Files.walk(resourcePath)
                 .filter { Files.isRegularFile(it) }
                 .map { resourcePath.relativize(it) }
