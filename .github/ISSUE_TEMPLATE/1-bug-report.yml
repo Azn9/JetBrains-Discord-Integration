@@ -23,12 +23,9 @@ body:
       label: Plugin version
       description: What version of the plugin are you using?
       options:
-        - 2.1.4
-        - 2.1.3
-        - 2.1.2
-        - 2.1.1
-        - 2.1.0
-        - 2.0.8
+        - 2.1.7
+        - 2.1.6
+        - 2.1.5
         - Older
     validations:
       required: true
