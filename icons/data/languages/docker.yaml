@@ -9,7 +9,7 @@ match:
       - .dockerignore
       - docker-sync.yml
       - .extra
-flavor:
+flavors:
   - name: Docker Compose
     parent: yaml
     match:
