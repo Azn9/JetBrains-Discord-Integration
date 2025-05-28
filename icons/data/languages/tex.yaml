@@ -2,7 +2,7 @@ name: TeX
 asset: tex
 parent: text
 match:
-  extensions:
+  extension:
     equals:
       - .tex
       - .ltx
