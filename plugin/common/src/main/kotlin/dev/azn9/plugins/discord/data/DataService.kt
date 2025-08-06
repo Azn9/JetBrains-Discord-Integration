@@ -53,6 +53,10 @@ val dataService: DataService
 
 @Service
 class DataService {
+    companion object {
+        private val TOOLBOX_SUFFIX_PATTERN = Regex("\\d+$")
+    }
+
     suspend fun getData(mode: Renderer.Mode): Data? = tryOrNull {
         mode.runCatching { getData() }
             .onFailure { e ->
@@ -66,7 +70,7 @@ class DataService {
     }
 
     private fun normalizeApplicationCode(rawCode: String): String {
-        val normalized = rawCode.replace(Regex("[_\\d]+$"), "")
+        val normalized = TOOLBOX_SUFFIX_PATTERN.replace(rawCode, "")
         DiscordPlugin.LOG.debug("Normalized application code '$rawCode' -> '$normalized'")
         return normalized
     }
