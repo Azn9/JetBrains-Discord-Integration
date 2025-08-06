@@ -53,6 +53,10 @@ val dataService: DataService
 
 @Service
 class DataService {
+    companion object {
+        private val TOOLBOX_SUFFIX_PATTERN = Regex("\\d+$")
+    }
+
     suspend fun getData(mode: Renderer.Mode): Data? = tryOrNull {
         mode.runCatching { getData() }
             .onFailure { e ->
@@ -63,6 +67,12 @@ class DataService {
                 DiscordPlugin.LOG.warnLazy(e) { "Failed to get data" }
             }
             .getOrNull()
+    }
+
+    private fun normalizeApplicationCode(rawCode: String): String {
+        val normalized = TOOLBOX_SUFFIX_PATTERN.replace(rawCode, "")
+        DiscordPlugin.LOG.debug("Normalized application code '$rawCode' -> '$normalized'")
+        return normalized
     }
 
     @JvmName("getDataInternal")
@@ -79,6 +89,8 @@ class DataService {
         val applicationVersion = applicationInfo.fullVersion
         val applicationTimeOpened = application.timeOpened
         val applicationTimeActive = application.timeActive
+
+        applicationCode = normalizeApplicationCode(applicationCode)
 
         val project: Project? = IdeFocusManager.getGlobalInstance().lastFocusedFrame?.project
 
