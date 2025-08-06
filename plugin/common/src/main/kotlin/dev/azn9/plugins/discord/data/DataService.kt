@@ -65,6 +65,16 @@ class DataService {
             .getOrNull()
     }
 
+    /**
+     * Normalizes application code to handle Toolbox variants
+     * Removes trailing numbers and underscores (e.g., "rustrover1" -> "rustrover")
+     */
+    private fun normalizeApplicationCode(rawCode: String): String {
+        val normalized = rawCode.replace(Regex("[_\\d]+$"), "")
+        DiscordPlugin.LOG.debug("Normalized application code '$rawCode' -> '$normalized'")
+        return normalized
+    }
+
     @JvmName("getDataInternal")
     private suspend fun (Renderer.Mode).getData(): Data {
         DiscordPlugin.LOG.debug("Getting data")
@@ -79,6 +89,9 @@ class DataService {
         val applicationVersion = applicationInfo.fullVersion
         val applicationTimeOpened = application.timeOpened
         val applicationTimeActive = application.timeActive
+
+        // Normalize application code to handle Toolbox variants (rustrover1, rustrover2, etc.)
+        applicationCode = normalizeApplicationCode(applicationCode)
 
         val project: Project? = IdeFocusManager.getGlobalInstance().lastFocusedFrame?.project
 
