@@ -1,0 +1,15 @@
+name: Svelte
+asset: svelte
+parent: javascript
+match:
+  extension:
+    equals:
+      - .svelte
+flavors:
+  - name: SvelteKit Config
+    match:
+      name:
+        equals:
+          - svelte.config.js
+          - svelte.config.ts
+          - svelte.config.mjs
