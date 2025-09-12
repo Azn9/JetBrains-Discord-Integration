@@ -1,3 +1,6 @@
+## v2.1.8
+- Fix detection of files incorrectly marked as Gradle
+
 ## v2.1.7
 - Fix small issues that raise errors without being real errors
 - Fix the webstorm icon not showing with the "macos" icons theme
