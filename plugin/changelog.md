@@ -1,5 +1,8 @@
 ## v2.1.8
 - Fix detection of files incorrectly marked as Gradle
+- Fix IDE detection on multiple versions
+- Fixed detection for TeX and Docker Compose files
+- Add Svelte language support
 
 ## v2.1.7
 - Fix small issues that raise errors without being real errors
