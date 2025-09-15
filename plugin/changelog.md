@@ -1,5 +1,6 @@
 ## v2.1.8
 - Fix detection of files incorrectly marked as Gradle
+- Fix .h files being displayed with the C icon
 
 ## v2.1.7
 - Fix small issues that raise errors without being real errors
