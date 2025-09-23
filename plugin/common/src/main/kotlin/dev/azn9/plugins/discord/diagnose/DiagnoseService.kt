@@ -22,6 +22,7 @@ import com.intellij.openapi.application.ApplicationNamesInfo
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.extensions.PluginDescriptor
+import dev.azn9.plugins.discord.DiscordPlugin
 import dev.azn9.plugins.discord.utils.DisposableCoroutineScope
 import dev.azn9.plugins.discord.utils.tryOrDefault
 import dev.cbyrne.kdiscordipc.core.socket.SocketProvider
@@ -92,6 +93,8 @@ class DiagnoseService : DisposableCoroutineScope {
     }
 
     private fun readDiscordWindows(): Discord {
+        DiscordPlugin.LOG.debug("Checking for Discord process on windows...")
+
         val browsers = arrayOf(
             "chrome.exe",
             "firefox.exe",
@@ -122,20 +125,26 @@ class DiagnoseService : DisposableCoroutineScope {
                 }
             }
 
+        DiscordPlugin.LOG.debug("IPC file found: $ipcFile")
+
         if (ipcFile != null) {
             try {
                 val socket = SocketProvider.systemDefault()
                 socket.connect(ipcFile)
                 socket.close()
             } catch (e: IOException) {
+                DiscordPlugin.LOG.debug("Failed to connect to IPC file", e)
                 return Discord.ADMINISTRATOR
             } catch (e: Throwable) {
-                // Ignore
+                DiscordPlugin.LOG.debug("Failed to connect to IPC file", e)
             }
 
             if (!ipcFile.canWrite() || !ipcFile.canRead()) {
+                DiscordPlugin.LOG.debug("Cannot read or write to IPC file")
                 return Discord.ADMINISTRATOR
             }
+
+            DiscordPlugin.LOG.debug("IPC file seems to be accessible")
 
             // We found an IPC file and seems to have access to it
             return Discord.OTHER
@@ -152,12 +161,15 @@ class DiagnoseService : DisposableCoroutineScope {
                 browsers.any { browser -> line.startsWith(browser, true)  && line.lowercase().contains("discord") }
             }
             if (discordBrowser) {
+                DiscordPlugin.LOG.debug("Discord browser detected")
                 return Discord.BROWSER
             }
         } else {
+            DiscordPlugin.LOG.debug("Discord client detected")
             return Discord.RUNNING_WITHOUT_RICH_PRESENCE_ENABLED
         }
 
+        DiscordPlugin.LOG.debug("Discord not running")
         return Discord.CLOSED
     }
 
@@ -172,6 +184,8 @@ class DiagnoseService : DisposableCoroutineScope {
                 "io.github.pandier.intellijdiscordrp" -> matches++
             }
         }
+
+        DiscordPlugin.LOG.debug("Found $matches plugins")
 
         return when (matches) {
             0 -> Plugins.NONE
