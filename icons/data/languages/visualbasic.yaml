@@ -9,6 +9,7 @@ match:
       - .frx # (form - binary information)
       - .ctl # (custom control)
       - .ctx # (custom control binary information)
+      - .vb  # (Visual Basic.NET file)
       - .vbp # (project)
       - .vbg # (project group)
       - .bas # (module)
