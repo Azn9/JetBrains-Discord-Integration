@@ -47,6 +47,8 @@ dependencies {
 
     antlr(libs.antlr)
     implementation(libs.antlr.runtime)
+
+    testImplementation(libs.kotlin.test)
 }
 
 repositories {
@@ -125,9 +127,6 @@ testing {
                 }
             }
 
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
             project.tasks {
                 compileTestKotlin {
                     dependsOn(generateTestGrammarSource)

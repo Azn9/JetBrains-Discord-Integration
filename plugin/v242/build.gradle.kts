@@ -48,6 +48,8 @@ dependencies {
     antlr(libs.antlr)
     implementation(libs.antlr.runtime)
 
+    testImplementation(libs.kotlin.test)
+
     intellijPlatform {
         create("IC", libs.versions.ide.v242)
 
@@ -153,9 +155,6 @@ testing {
                 }
             }
 
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
             project.tasks {
                 compileTestKotlin {
                     dependsOn(generateTestGrammarSource)
