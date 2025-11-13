@@ -117,7 +117,8 @@ class DiagnoseService : DisposableCoroutineScope {
         )
 
         val ipcFile = (0..9).map { "discord-ipc-$it" }
-            .map { File("\\\\?\\pipe\\$it") }.firstOrNull { file ->
+            .map { File("\\\\.\\pipe\\$it") }
+            .firstOrNull { file ->
                 try {
                     file.exists()
                 } catch (e: Exception) {
