@@ -5,4 +5,3 @@ match:
   extension:
     equals:
       - .c
-      - .h
