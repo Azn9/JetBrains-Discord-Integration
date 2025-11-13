@@ -1,9 +1,16 @@
+## v2.1.9
+- Fix .h files being displayed with the C icon
+- Fix discord's detection on windows
+- Fix some issues with the presence not showing on windows
+- Add Visual Basic icons
+- Add .vb as valid VB.NET file extension
+- Display .h files as H instead of C
+
 ## v2.1.8
 - Fix detection of files incorrectly marked as Gradle
 - Fix IDE detection on multiple versions
 - Fixed detection for TeX and Docker Compose files
 - Add Svelte language support
-- Fix .h files being displayed with the C icon
 
 ## v2.1.7
 - Fix small issues that raise errors without being real errors
