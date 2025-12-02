@@ -33,6 +33,10 @@ class ApplicationRenderer(context: RenderContext) : Renderer(context) {
         smallIconCustom = settings.applicationIconSmallCustom,
         smallIconText = settings.applicationIconSmallText,
         smallIconTextCustom = settings.applicationIconSmallTextCustom,
-        startTimestamp = settings.applicationTime
+        startTimestamp = settings.applicationTime,
+        button1Title = settings.button1Text.getValue(),
+        button1Url = settings.button1Url.getValue(),
+        button2Title = settings.button2Text.getValue(),
+        button2Url = settings.button2Url.getValue()
     )
 }
