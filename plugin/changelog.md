@@ -1,3 +1,8 @@
+## v2.1.10
+- Fix some issues with the presence not showing on windows
+- Fix false positive administrator detection on windows on latest IDE versions
+- Fix freezes when opening the settings until the preview loaded
+
 ## v2.1.9
 - Fix .h files being displayed with the C icon
 - Fix discord's detection on windows
