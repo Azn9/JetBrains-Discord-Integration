@@ -20,14 +20,13 @@ package dev.azn9.plugins.discord.postLoad
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
-import com.intellij.openapi.application.ApplicationNamesInfo
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.startup.StartupActivity
 import dev.azn9.plugins.discord.DiscordPlugin
+import dev.azn9.plugins.discord.diagnose.DiagnoseService
 import dev.azn9.plugins.discord.diagnose.diagnoseService
 import dev.azn9.plugins.discord.settings.values.ApplicationType
 import dev.azn9.plugins.discord.utils.DisposableCoroutineScope
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.startup.StartupActivity
-import dev.azn9.plugins.discord.diagnose.DiagnoseService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.future.asCompletableFuture
@@ -62,81 +61,44 @@ class DiagnosePreloadingActivity : StartupActivity.Background, StartupActivity.D
         }
 
         diagnoseService.discord.asCompletableFuture().thenAcceptAsync { discord ->
-            when (discord) {
-                DiagnoseService.Discord.SNAP -> {
-                    NotificationGroupManager.getInstance()
-                        .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
-                        .createNotification("Discord Integration V2", "Discord detected as snap package, this will prevent the plugin from connecting to Discord!", NotificationType.ERROR)
-                        .setImportant(true)
-                        .run(Notifications.Bus::notify)
-                }
-                DiagnoseService.Discord.FLATPAK -> {
-                    NotificationGroupManager.getInstance()
-                        .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
-                        .createNotification("Discord Integration V2", "Discord detected a flatpak package, this may prevent the plugin from connecting to Discord!", NotificationType.WARNING)
-                        .setImportant(true)
-                        .run(Notifications.Bus::notify)
-                }
-                DiagnoseService.Discord.RUNNING_WITHOUT_RICH_PRESENCE_ENABLED -> {
-                    NotificationGroupManager.getInstance()
-                        .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
-                        .createNotification("Discord Integration V2", "Discord detected but rich presence is not enabled, this will prevent the plugin from connecting to Discord!", NotificationType.WARNING)
-                        .setImportant(true)
-                        .run(Notifications.Bus::notify)
-                }
-                DiagnoseService.Discord.BROWSER -> {
-                    NotificationGroupManager.getInstance()
-                        .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
-                        .createNotification("Discord Integration V2", "Discord detected in a web browser, this will prevent the plugin from connecting to Discord!", NotificationType.ERROR)
-                        .setImportant(true)
-                        .run(Notifications.Bus::notify)
-                }
-                DiagnoseService.Discord.ADMINISTRATOR -> {
-                    NotificationGroupManager.getInstance()
-                        .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
-                        .createNotification("Discord Integration V2", "Discord detected running as administrator, this will prevent the plugin from connecting to Discord!", NotificationType.ERROR)
-                        .setImportant(true)
-                        .run(Notifications.Bus::notify)
-                }
+            val notificationType = when (discord) {
+                DiagnoseService.Discord.CLOSED, DiagnoseService.Discord.SNAP, DiagnoseService.Discord.BROWSER, DiagnoseService.Discord.ADMINISTRATOR -> NotificationType.ERROR
+                else -> NotificationType.WARNING
+            }
 
-                else -> {}
-            }
+            NotificationGroupManager.getInstance()
+                .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
+                .createNotification("Discord Integration V2", discord.message, notificationType)
+                .setImportant(true)
+                .run(Notifications.Bus::notify)
         }
+
         diagnoseService.plugins.asCompletableFuture().thenAcceptAsync { plugins ->
-            if (plugins == DiagnoseService.Plugins.ONE) {
-                NotificationGroupManager.getInstance()
-                    .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
-                    .createNotification(
-                        "Discord Integration V2",
-                        "An other Discord notification plugin has been detected, please uninstall it as it may prevent Discord Integration V2 from working correctly!",
-                        NotificationType.WARNING
-                    )
-                    .setImportant(true)
-                    .run(Notifications.Bus::notify)
-            } else if (plugins == DiagnoseService.Plugins.MULTIPLE) {
-                NotificationGroupManager.getInstance()
-                    .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
-                    .createNotification(
-                        "Discord Integration V2",
-                        "Multiple other Discord notification plugins has been detected, please uninstall them as they may prevent Discord Integration V2 from working correctly!",
-                        NotificationType.WARNING
-                    )
-                    .setImportant(true)
-                    .run(Notifications.Bus::notify)
-            }
+            NotificationGroupManager.getInstance()
+                .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
+                .createNotification(
+                    "Discord Integration V2",
+                    plugins.message,
+                    NotificationType.WARNING
+                )
+                .setImportant(true)
+                .run(Notifications.Bus::notify)
         }
+
         diagnoseService.ide.asCompletableFuture().thenAcceptAsync { ide ->
-            if (ide != DiagnoseService.Ide.OTHER) {
-                NotificationGroupManager.getInstance()
-                    .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
-                    .createNotification(
-                        "Discord Integration V2",
-                        "${ApplicationNamesInfo.getInstance().fullProductName} is running as a Snap package. This will most likely prevent the plugin from connection to your Discord client!",
-                        NotificationType.WARNING
-                    )
-                    .setImportant(true)
-                    .run(Notifications.Bus::notify)
+            if (ide == DiagnoseService.Ide.OTHER) {
+                return@thenAcceptAsync
             }
+
+            NotificationGroupManager.getInstance()
+                .getNotificationGroup("dev.azn9.plugins.discord.notification.error")
+                .createNotification(
+                    "Discord Integration V2",
+                    ide.message,
+                    NotificationType.WARNING
+                )
+                .setImportant(true)
+                .run(Notifications.Bus::notify)
         }
     }
 }
