@@ -140,11 +140,6 @@ class DiagnoseService : DisposableCoroutineScope {
                 DiscordPlugin.LOG.debug("Failed to connect to IPC file", e)
             }
 
-            if (!ipcFile.canWrite() || !ipcFile.canRead()) {
-                DiscordPlugin.LOG.debug("Cannot read or write to IPC file")
-                return Discord.ADMINISTRATOR
-            }
-
             DiscordPlugin.LOG.debug("IPC file seems to be accessible")
 
             // We found an IPC file and seems to have access to it
@@ -223,7 +218,7 @@ class DiagnoseService : DisposableCoroutineScope {
         BROWSER("It seems like Discord is running in the browser. The plugin will not be able to connect to the Discord client!"),
         CLOSED("Could not detect a running Discord client!"),
         RUNNING_WITHOUT_RICH_PRESENCE_ENABLED("It seems like Discord is running, but Rich Presence is not enabled!"),
-        ADMINISTRATOR("It seems like Discord is running in administrator, this will prevent the plugin from connecting to your Discord client!"),
+        ADMINISTRATOR("Discord is detected, but the plugin cannot communicate with it. Please make sure you don't run Discord as administrator."),
         OTHER("")
     }
 
