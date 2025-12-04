@@ -37,6 +37,8 @@ import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ex.ApplicationInfoEx
 import com.intellij.openapi.project.ProjectManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.apache.commons.lang3.time.DurationFormatUtils
 import java.awt.Color
 import java.awt.Font
@@ -179,45 +181,49 @@ class PreviewRenderer {
         var lastApplicationName: String? = null
         var lastImagesEmpty: Boolean? = null
 
-        fun draw(image: BufferedImage, presence: RichPresence, force: Boolean): Boolean {
+        suspend fun draw(image: BufferedImage, presence: RichPresence, force: Boolean): Boolean {
 // TODO : add buttons
             val (imagesModified, imagesEmpty) = images.draw(image, presence, force)
 
             if (force || first) {
 
                 // "Playing a game"
-                image.withGraphics {
-                    val sectionStart = (image.height * 0.6).toInt()
+                withContext(Dispatchers.IO) {
+                    image.withGraphics {
+                        val sectionStart = (image.height * 0.6).toInt()
 
-                    color = blurple
-                    fillRect(0, sectionStart, image.width, 10 + font11BlackHeight + 8)
-                    color = darkOverlay
-                    fillRect(0, sectionStart, image.width, 10 + font11BlackHeight + 8)
+                        color = blurple
+                        fillRect(0, sectionStart, image.width, 10 + font11BlackHeight + 8)
+                        color = darkOverlay
+                        fillRect(0, sectionStart, image.width, 10 + font11BlackHeight + 8)
 
-                    font = font11Black
-                    color = Color.white
-                    drawString("PLAYING A GAME", 10, sectionStart + 10 + font11BlackBaseline)
+                        font = font11Black
+                        color = Color.white
+                        drawString("PLAYING A GAME", 10, sectionStart + 10 + font11BlackBaseline)
+                    }
                 }
             }
 
             val applicationName = settings.applicationType.getPreviewValue().applicationNameReadable
             if (force || lastApplicationName != applicationName || lastImagesEmpty != imagesEmpty) {
                 // IDE name
-                image.withGraphics {
-                    val sectionStart = (image.height * 0.6).toInt() + 10 + font11BlackHeight + 8
-                    val indentation = when (imagesEmpty) {
-                        true -> 7
-                        false -> 77
+                withContext(Dispatchers.IO) {
+                    image.withGraphics {
+                        val sectionStart = (image.height * 0.6).toInt() + 10 + font11BlackHeight + 8
+                        val indentation = when (imagesEmpty) {
+                            true -> 7
+                            false -> 77
+                        }
+
+                        color = blurple
+                        fillRect(indentation, sectionStart, image.width - indentation, font14BoldMaxHeight)
+                        color = darkOverlay
+                        fillRect(indentation, sectionStart, image.width - indentation, font14BoldMaxHeight)
+
+                        font = font14Bold
+                        color = whiteTranslucent80
+                        drawString(applicationName, indentation + 3, sectionStart + font14BoldBaseline)
                     }
-
-                    color = blurple
-                    fillRect(indentation, sectionStart, image.width - indentation, font14BoldMaxHeight)
-                    color = darkOverlay
-                    fillRect(indentation, sectionStart, image.width - indentation, font14BoldMaxHeight)
-
-                    font = font14Bold
-                    color = whiteTranslucent80
-                    drawString(applicationName, indentation + 3, sectionStart + font14BoldBaseline)
                 }
             }
 
@@ -236,19 +242,23 @@ class PreviewRenderer {
             private var lastSmall: BufferedImage? = null
             private var lastAppId: Long? = null
 
-            fun draw(image: BufferedImage, presence: RichPresence, force: Boolean): Pair<Boolean, Boolean> {
+            suspend fun draw(image: BufferedImage, presence: RichPresence, force: Boolean): Pair<Boolean, Boolean> {
                 val largeKey = presence.largeImage?.key
                 val smallKey = presence.smallImage?.key
                 val appId = presence.appId
 
                 if (force || lastLargeKey != largeKey || lastSmallKey != smallKey || lastAppId != appId) {
                     val large = if (lastLargeKey != largeKey || lastAppId != appId) {
-                        presence.largeImage?.asset?.getImage(60)?.toScaledImage(60)?.withRoundedCorners(8.0)
+                        withContext(Dispatchers.IO) {
+                            presence.largeImage?.asset?.getImage(60)?.toScaledImage(60)?.withRoundedCorners(8.0)
+                        }
                     } else {
                         lastLarge
                     }
                     val small = if (lastSmallKey != smallKey || lastAppId != appId) {
-                        presence.smallImage?.asset?.getImage(20)?.toScaledImage(20)?.toRoundImage()
+                        withContext(Dispatchers.IO) {
+                            presence.smallImage?.asset?.getImage(20)?.toScaledImage(20)?.toRoundImage()
+                        }
                     } else {
                         lastSmall
                     }
@@ -259,34 +269,36 @@ class PreviewRenderer {
                     lastSmallKey = smallKey
                     lastAppId = appId
 
-                    image.withGraphics {
-                        val sectionStart = (image.height * 0.6).toInt() + 10 + font11BlackHeight + 8
-                        val width = when (large) {
-                            null -> 8.0
-                            else -> 78.0
-                        }
-
-                        color = blurple
-                        fill(roundRectangle(0.0, sectionStart.toDouble(), width, (image.height - sectionStart).toDouble(), radiusBottomLeft = 10.0))
-                        color = darkOverlay
-                        fill(roundRectangle(0.0, sectionStart.toDouble(), width, (image.height - sectionStart).toDouble(), radiusBottomLeft = 10.0))
-
-                        if (large != null) {
-                            drawImage(large, 10, sectionStart, null)
-
-                            if (small != null) {
-                                color = blurple
-                                fillArc(10 + 45 - 2, sectionStart + 45 - 2, 24, 24, 0, 360)
-                                color = darkOverlay
-                                fillArc(10 + 45 - 2, sectionStart + 45 - 2, 24, 24, 0, 360)
-
-                                drawImage(small, 10 + 45, sectionStart + 45, null)
+                    withContext(Dispatchers.IO) {
+                        image.withGraphics {
+                            val sectionStart = (image.height * 0.6).toInt() + 10 + font11BlackHeight + 8
+                            val width = when (large) {
+                                null -> 8.0
+                                else -> 78.0
                             }
 
-                            return true to false
-                        }
+                            color = blurple
+                            fill(roundRectangle(0.0, sectionStart.toDouble(), width, (image.height - sectionStart).toDouble(), radiusBottomLeft = 10.0))
+                            color = darkOverlay
+                            fill(roundRectangle(0.0, sectionStart.toDouble(), width, (image.height - sectionStart).toDouble(), radiusBottomLeft = 10.0))
 
-                        return true to true
+                            if (large != null) {
+                                drawImage(large, 10, sectionStart, null)
+
+                                if (small != null) {
+                                    color = blurple
+                                    fillArc(10 + 45 - 2, sectionStart + 45 - 2, 24, 24, 0, 360)
+                                    color = darkOverlay
+                                    fillArc(10 + 45 - 2, sectionStart + 45 - 2, 24, 24, 0, 360)
+
+                                    drawImage(small, 10 + 45, sectionStart + 45, null)
+                                }
+
+                                return@withContext true to false
+                            }
+
+                            return@withContext true to true
+                        }
                     }
 
                 }

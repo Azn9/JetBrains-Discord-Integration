@@ -29,7 +29,7 @@ import java.time.OffsetDateTime
 import java.time.ZoneId
 
 class IdleRenderer(context: RenderContext) : Renderer(context) {
-    override fun RenderContext.render(): RichPresence {
+    override suspend fun RenderContext.render(): RichPresence {
 
         return RichPresence(idleData?.applicationId) presence@{
             this@presence.details = "Idling"

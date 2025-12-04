@@ -22,7 +22,7 @@ import dev.azn9.plugins.discord.rpc.RichPresence
 import dev.azn9.plugins.discord.settings.settings
 
 class FileRenderer(context: RenderContext) : Renderer(context) {
-    override fun RenderContext.render(): RichPresence {
+    override suspend fun RenderContext.render(): RichPresence {
         val projectSettings = (context.data as Data.Project).projectSettings
 
         return render(

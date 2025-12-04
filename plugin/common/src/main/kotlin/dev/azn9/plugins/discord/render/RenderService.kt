@@ -31,6 +31,7 @@ import dev.azn9.plugins.discord.utils.scheduleWithFixedDelay
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -43,7 +44,6 @@ class RenderService : DisposableCoroutineScope {
     override val parentJob: Job = SupervisorJob()
 
     private var renderClockJob: ScheduledFuture<*>? = null
-
     private var renderJob: Job? = null
 
     @Synchronized
@@ -60,6 +60,7 @@ class RenderService : DisposableCoroutineScope {
 
             if (data == null) {
                 DiscordPlugin.LOG.debugLazy { "No data to render" }
+                renderJob = null
                 return@launch
             }
 
@@ -93,8 +94,8 @@ class RenderService : DisposableCoroutineScope {
         this.renderClockJob = executor.scheduleWithFixedDelay(delay = 5, unit = TimeUnit.SECONDS) {
             try {
                 render()
-            } catch (e: ProcessCanceledException) {
-                throw e
+            } catch (e: CancellationException) {
+                // Ignore coroutine cancellations (e.g., previous render cancelled)
             } catch (e: Exception) {
                 DiscordPlugin.LOG.error("Error rendering presence", e)
             }

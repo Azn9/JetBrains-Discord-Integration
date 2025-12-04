@@ -18,33 +18,37 @@
 package dev.azn9.plugins.discord.settings.gui.preview
 
 import dev.azn9.plugins.discord.render.Renderer
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.awt.event.HierarchyEvent
 import javax.swing.ImageIcon
 import javax.swing.JLabel
 import javax.swing.Timer
+import javax.swing.SwingUtilities
 
 class JPreview : JLabel() {
 
     private val preview = PreviewRenderer()
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    private val worker = Timer(100) { update() }
+    private val worker = Timer(1000) {
+        scope.launch(Dispatchers.Default) {
+            update()
+        }
+    }
     private val mutex = Mutex()
 
     var type: Renderer.Type.Application = Renderer.Type.Application
         set(value) {
             field = value
-            update()
+            scope.launch { update() }
         }
 
     init {
         icon = ImageIcon(preview.dummy)
 
-        update(true)
-
+        scope.launch { update(true) }
         worker.start()
 
         addHierarchyListener { e ->
@@ -58,17 +62,14 @@ class JPreview : JLabel() {
         }
     }
 
-    @Synchronized
-    fun update(force: Boolean = false) {
-        runBlocking { // Try to work around #239
-            mutex.withLock {
-                if (isShowing) {
-                    launch {
-                        val (modified, image) = preview.draw(type, force)
+    suspend fun update(force: Boolean = false) {
+        mutex.withLock {
+            if (isShowing) {
+                val (modified, image) = preview.draw(type, force)
 
-                        if (modified) {
-                            icon = ImageIcon(image)
-                        }
+                if (modified) {
+                    SwingUtilities.invokeLater {
+                        icon = ImageIcon(image)
                     }
                 }
             }

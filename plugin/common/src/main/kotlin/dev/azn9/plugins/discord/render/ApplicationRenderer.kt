@@ -20,7 +20,7 @@ package dev.azn9.plugins.discord.render
 import dev.azn9.plugins.discord.settings.settings
 
 class ApplicationRenderer(context: RenderContext) : Renderer(context) {
-    override fun RenderContext.render() = render(
+    override suspend fun RenderContext.render() = render(
         details = settings.applicationDetails,
         detailsCustom = settings.applicationDetailsCustom,
         state = settings.applicationState,

@@ -30,9 +30,9 @@ import java.time.OffsetDateTime
 import java.time.ZoneId
 
 abstract class Renderer(protected val context: RenderContext) {
-    fun render(): RichPresence = context.render()
+    suspend fun render(): RichPresence = context.render()
 
-    protected abstract fun RenderContext.render(): RichPresence
+    protected abstract suspend fun RenderContext.render(): RichPresence
 
     protected fun RenderContext.render(
         details: TextValue?,
