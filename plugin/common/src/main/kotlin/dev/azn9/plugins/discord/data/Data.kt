@@ -96,6 +96,7 @@ sealed class Data {
         val filePath: String,
         val fileIsWriteable: Boolean,
         val editorIsTextEditor: Boolean,
+        val isDiffEditor: Boolean,
         val caretLine: Int,
         val lineCount: Int,
         val moduleName: String?,
@@ -141,7 +142,7 @@ sealed class Data {
         }
 
         override fun toString(): String {
-            return "Data.File(applicationName='$applicationName', applicationVersion='$applicationVersion', applicationTimeOpened=$applicationTimeOpened, applicationTimeActive=$applicationTimeActive, projectName='$projectName', projectDescription='$projectDescription', projectTimeOpened=$projectTimeOpened, projectTimeActive=$projectTimeActive, vcsBranch=$vcsBranch, fileName='$fileName', fileNameUnique='$fileNameUnique', fileTimeOpened=$fileTimeOpened, fileTimeActive=$fileTimeActive, filePath='$filePath', fileIsWriteable=$fileIsWriteable, editorIsTextEditor=$editorIsTextEditor, caretLine=$caretLine, lineCount=$lineCount, moduleName=$moduleName, pathInModule=$pathInModule, fileSize=$fileSize)"
+            return "Data.File(applicationName='$applicationName', applicationVersion='$applicationVersion', applicationTimeOpened=$applicationTimeOpened, applicationTimeActive=$applicationTimeActive, projectName='$projectName', projectDescription='$projectDescription', projectTimeOpened=$projectTimeOpened, projectTimeActive=$projectTimeActive, vcsBranch=$vcsBranch, fileName='$fileName', fileNameUnique='$fileNameUnique', fileTimeOpened=$fileTimeOpened, fileTimeActive=$fileTimeActive, filePath='$filePath', fileIsWriteable=$fileIsWriteable, editorIsTextEditor=$editorIsTextEditor, isDiffEditor=$isDiffEditor, caretLine=$caretLine, lineCount=$lineCount, moduleName=$moduleName, pathInModule=$pathInModule, fileSize=$fileSize)"
         }
     }
 }

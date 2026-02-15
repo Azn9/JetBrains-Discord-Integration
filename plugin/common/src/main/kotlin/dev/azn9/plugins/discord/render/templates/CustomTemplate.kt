@@ -46,6 +46,7 @@ object Utils {
             "Language" -> context.language
             "FileSize" -> sizeAsString(context.fileData?.fileSize)
             "IsTextEditor" -> context.fileData?.editorIsTextEditor.toString()
+            "IsDiffEditor" -> context.fileData?.isDiffEditor.toString()
             "FileIsWritable" -> context.fileData?.fileIsWriteable.toString()
             "DebuggerActive" -> context.projectData?.debuggerActive.toString()
             else -> null
@@ -212,6 +213,7 @@ private fun Data.asTemplateData(): TemplateData =
                 this.filePath,
                 this.fileIsWriteable,
                 this.editorIsTextEditor,
+                this.isDiffEditor,
                 this.caretLine,
                 this.lineCount,
                 this.moduleName,
@@ -263,6 +265,7 @@ sealed class TemplateData {
         val filePath: String,
         val fileIsWriteable: Boolean,
         val editorIsTextEditor: Boolean,
+        val isDiffEditor: Boolean,
 
         val caretLine: Int,
         val lineCount: Int,

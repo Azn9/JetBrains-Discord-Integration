@@ -27,6 +27,7 @@ import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.fileEditor.UniqueVFilePathBuilder
+import com.intellij.openapi.fileEditor.impl.EditorTabTitleProvider
 import com.intellij.openapi.module.ModuleUtil
 import com.intellij.openapi.project.DumbService
 import com.intellij.openapi.project.Project
@@ -55,6 +56,7 @@ val dataService: DataService
 class DataService {
     companion object {
         private val TOOLBOX_SUFFIX_PATTERN = Regex("\\d+$")
+        private val FILENAME_PATTERN = Regex("""\b[\w\-]+\.[\w.]+\b""")
     }
 
     suspend fun getData(mode: Renderer.Mode): Data? = tryOrNull {
@@ -181,12 +183,31 @@ class DataService {
                         && project.settings.show.getValue() >= ProjectShow.PROJECT_FILES
                         && !(settings.fileHideVcsIgnored.getValue() && isVcsIgnored(project, file))
                     ) {
-                        val fileName = file.name
-                        val fileUniqueName = when (DumbService.isDumb(project)) {
-                            true -> fileName
-                            false -> invokeReadAction {
-                                tryOrDefault(fileName, false) {
-                                    UniqueVFilePathBuilder.getInstance().getUniqueVirtualFilePath(project, file)
+                        val isDiffEditor = editor.javaClass.name.contains("Diff") ||
+                                           file.javaClass.name.contains("DiffVirtualFile")
+
+                        val fileName: String
+                        val fileUniqueName: String
+                        if (isDiffEditor) {
+                            val diffName = tryOrNull {
+                                EditorTabTitleProvider.EP_NAME.extensionList
+                                    .asSequence()
+                                    .mapNotNull { it.getEditorTabTooltipText(project, file) }
+                                    .firstOrNull { it.isNotEmpty() && it != file.name }
+                                    ?.let { title ->
+                                        FILENAME_PATTERN.find(title)?.value ?: title
+                                    }
+                            }
+                            fileName = diffName ?: file.name
+                            fileUniqueName = fileName
+                        } else {
+                            fileName = file.name
+                            fileUniqueName = when (DumbService.isDumb(project)) {
+                                true -> fileName
+                                false -> invokeReadAction {
+                                    tryOrDefault(fileName, false) {
+                                        UniqueVFilePathBuilder.getInstance().getUniqueVirtualFilePath(project, file)
+                                    }
                                 }
                             }
                         }
@@ -248,6 +269,7 @@ class DataService {
                             filePath,
                             fileIsWriteable,
                             editorIsTextEditor,
+                            isDiffEditor,
                             caretLine,
                             lineCount,
                             moduleData.moduleName,
