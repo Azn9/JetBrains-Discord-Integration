@@ -56,7 +56,7 @@ val dataService: DataService
 class DataService {
     companion object {
         private val TOOLBOX_SUFFIX_PATTERN = Regex("\\d+$")
-        private val FILENAME_PATTERN = Regex("""\b[\w\-]+\.[\w.]+\b""")
+        private val FILENAME_PATTERN = Regex("""\b[\w\-]+(?:\.[\w\-]+)+\b""")
     }
 
     suspend fun getData(mode: Renderer.Mode): Data? = tryOrNull {
