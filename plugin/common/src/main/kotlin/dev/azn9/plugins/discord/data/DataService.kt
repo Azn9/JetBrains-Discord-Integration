@@ -195,7 +195,7 @@ class DataService {
                                     .mapNotNull { it.getEditorTabTooltipText(project, file) }
                                     .firstOrNull { it.isNotEmpty() && it != file.name }
                                     ?.let { title ->
-                                        FILENAME_PATTERN.find(title)?.value ?: title
+                                        FILENAME_PATTERN.find(title)?.value
                                     }
                             }
                             fileName = diffName ?: file.name
