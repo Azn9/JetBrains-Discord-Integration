@@ -23,8 +23,11 @@ import dev.azn9.plugins.discord.render.renderService
 import dev.azn9.plugins.discord.time.timeService
 import dev.azn9.plugins.discord.utils.createErrorMessage
 import com.intellij.openapi.options.SearchableConfigurable
+import dev.azn9.plugins.discord.rpc.rpcService
 import kotlinx.coroutines.future.asCompletableFuture
+import org.jetbrains.concurrency.createError
 import javax.swing.BoxLayout
+import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.SwingUtilities
 
@@ -51,12 +54,29 @@ class ApplicationConfigurable : SearchableConfigurable {
         layout = BoxLayout(this@panel, BoxLayout.Y_AXIS)
 
         val service = diagnoseService
+        var errorComponent: JComponent? = null
+        var buildRunnable: Runnable? = null
 
-        service.discord.asCompletableFuture().thenAcceptAsync { discord ->
-            if (discord != DiagnoseService.Discord.OTHER) {
-                SwingUtilities.invokeLater { add(createErrorMessage(discord.message), 0) }
+        buildRunnable = Runnable {
+            service.discord.asCompletableFuture().thenAcceptAsync { discord ->
+                if (discord != DiagnoseService.Discord.OTHER) {
+                    SwingUtilities.invokeLater {
+                        val component = createErrorMessage(discord.message) {
+                            SwingUtilities.invokeLater {
+                                remove(errorComponent)
+                                service.restartDetection()
+                                buildRunnable!!.run()
+                                revalidate()
+                            }
+                            rpcService.update(null)
+                        }
+                        errorComponent = component
+                        add(component, 0)
+                    }
+                }
             }
         }
+        buildRunnable.run()
 
         service.plugins.asCompletableFuture().thenAcceptAsync { plugins ->
             if (plugins != DiagnoseService.Plugins.NONE) {

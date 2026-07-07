@@ -26,7 +26,7 @@ import javax.swing.*
 
 inline fun gbc(block: (GridBagConstraints.() -> Unit)): GridBagConstraints = GridBagConstraints().apply(block)
 
-fun createErrorMessage(message: String): JComponent = JPanel().apply warning@{
+fun createErrorMessage(message: String, refreshAction: Runnable? = null): JComponent = JPanel().apply warning@{
     this@warning.layout = BoxLayout(this@warning, BoxLayout.X_AXIS)
 
     background = Color(255, 25, 25, 150)
@@ -35,6 +35,15 @@ fun createErrorMessage(message: String): JComponent = JPanel().apply warning@{
     add(Box.createHorizontalStrut(10))
     add(JBLabel("<html>$message</html>"))
     add(Box.createHorizontalGlue())
+
+    if (refreshAction != null) {
+        add(JButton("Refresh").apply {
+            addActionListener { _ ->
+                refreshAction.run()
+            }
+        })
+        add(Box.createHorizontalStrut(10))
+    }
 
     border = JBUI.Borders.merge(JBUI.Borders.empty(10), JBUI.Borders.customLine(Color(255, 25, 25, 200)), true)
 }

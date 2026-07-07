@@ -42,9 +42,14 @@ val diagnoseService: DiagnoseService
 class DiagnoseService : DisposableCoroutineScope {
     override val parentJob: Job = SupervisorJob()
 
-    val discord = async(start = CoroutineStart.DEFAULT) { tryOrDefault(Discord.OTHER) { readDiscord() } }
-    val plugins = async(start = CoroutineStart.DEFAULT) { tryOrDefault(Plugins.NONE) { readPlugins() } }
-    val ide = async(start = CoroutineStart.DEFAULT) { tryOrDefault(Ide.OTHER) { readIde() } }
+    var discord = async(start = CoroutineStart.DEFAULT) { tryOrDefault(Discord.FAILED) { readDiscord() } }
+    val plugins = async(start = CoroutineStart.DEFAULT) { tryOrDefault(Plugins.FAILED) { readPlugins() } }
+    val ide = async(start = CoroutineStart.DEFAULT) { tryOrDefault(Ide.FAILED) { readIde() } }
+
+    fun restartDetection() {
+        discord.cancel()
+        discord = async(start = CoroutineStart.DEFAULT) { tryOrDefault(Discord.FAILED) { readDiscord() } }
+    }
 
     private fun readDiscord(): Discord = when {
         SystemUtils.IS_OS_WINDOWS -> readDiscordWindows()
@@ -79,8 +84,16 @@ class DiagnoseService : DisposableCoroutineScope {
     private fun readDiscordLinux(): Discord {
         val process = Runtime.getRuntime().exec("ps xo user:30,command")
         process.waitFor()
+
+        val clients = arrayOf(
+            "/discord",
+            "/vesktop"
+        )
+
         val lines = process.inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
-            reader.lineSequence().filter { line -> line.contains("/discord", true) }.joinToString("\n")
+            reader.lineSequence().filter { line ->
+                clients.any { client -> line.contains(client, true) }
+            }.joinToString("\n")
         }
 
         return when {
@@ -219,17 +232,20 @@ class DiagnoseService : DisposableCoroutineScope {
         CLOSED("Could not detect a running Discord client!"),
         RUNNING_WITHOUT_RICH_PRESENCE_ENABLED("It seems like Discord is running, but Rich Presence is not enabled!"),
         ADMINISTRATOR("Discord is detected, but the plugin cannot communicate with it. Please make sure you don't run Discord as administrator."),
+        FAILED("Discord detection failed"),
         OTHER("")
     }
 
     enum class Plugins(val message: String) {
         NONE(""),
         ONE("It seems like you have another Rich Presence plugin installed. Please uninstall it to avoid conflicts!"),
-        MULTIPLE("It seems like you have multiple other Rich Presence plugin installed. Please uninstall them to avoid conflicts!")
+        MULTIPLE("It seems like you have multiple other Rich Presence plugin installed. Please uninstall them to avoid conflicts!"),
+        FAILED("Rich Presence plugin detection failed")
     }
 
     enum class Ide(val message: String) {
         SNAP("${ApplicationNamesInfo.getInstance().fullProductName} is running as a Snap package. This will most likely prevent the plugin from connection to your Discord client!"),
+        FAILED("IDE detection failed"),
         OTHER("")
     }
 }
