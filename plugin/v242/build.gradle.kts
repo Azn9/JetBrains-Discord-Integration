@@ -48,6 +48,8 @@ dependencies {
     antlr(libs.antlr)
     implementation(libs.antlr.runtime)
 
+    testImplementation(libs.kotlin.test)
+
     intellijPlatform {
         create("IC", libs.versions.ide.v242)
 
@@ -67,7 +69,7 @@ repositories {
     maven("https://jitpack.io")
 
     mavenLocal()
-    maven("https://nexus.azn9.dev/repository/public")
+    maven("https://nexus.azn9.dev/repository/maven-public")
 
     intellijPlatform {
         defaultRepositories()
@@ -84,8 +86,6 @@ sourceSets {
         }
     }
 }
-
-val isCI = System.getenv("CI") != null
 
 intellijPlatform {
     pluginConfiguration {
@@ -105,7 +105,7 @@ intellijPlatform {
 
     idea {
         module {
-            isDownloadSources = !isCI
+            isDownloadSources = System.getenv("CI") == null
         }
     }
 
@@ -153,9 +153,6 @@ testing {
                 }
             }
 
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
             project.tasks {
                 compileTestKotlin {
                     dependsOn(generateTestGrammarSource)
