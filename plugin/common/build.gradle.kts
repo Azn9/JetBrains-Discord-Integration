@@ -19,7 +19,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = providers.gradleProperty(key)
-val isCI by lazy { System.getenv("CI") != null }
 
 plugins {
     alias(libs.plugins.kotlin.common)
@@ -34,7 +33,7 @@ plugins {
 intellij {
     pluginName.set(properties("pluginName").get())
     version(libs.versions.ide.v212) // Lowest supported version
-    downloadSources(!isCI)
+    downloadSources(System.getenv("CI") == null)
     instrumentCode(false)
     updateSinceUntilBuild(false)
 }
@@ -44,7 +43,7 @@ repositories {
     maven("https://jitpack.io")
 
     mavenLocal()
-    maven("https://nexus.azn9.dev/repository/public")
+    maven("https://nexus.azn9.dev/repository/maven-public")
 
     maven("https://www.jetbrains.com/intellij-repository/releases/")
 }
@@ -57,6 +56,8 @@ dependencies {
 
     antlr(libs.antlr)
     implementation(libs.antlr.runtime)
+
+    implementation(libs.kotlin.test)
 }
 
 val generatedSourceDir = project.file("src/generated")
@@ -115,9 +116,6 @@ testing {
                 }
             }
 
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
             project.tasks {
                 compileTestKotlin {
                     dependsOn(generateTestGrammarSource)
