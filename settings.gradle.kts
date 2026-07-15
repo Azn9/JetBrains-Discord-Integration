@@ -42,7 +42,7 @@ pluginManagement {
 plugins {
     // Version Catalogs are not supported in settings.gradle.kts
     // alias(libs.plugins.foojay.resolver.convention)
-    id("org.gradle.toolchains.foojay-resolver-convention") version ("0.7.0")
+    id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
 }
 
 // TODO: use when https://github.com/JetBrains/gradle-intellij-plugin/issues/776 is fixed
