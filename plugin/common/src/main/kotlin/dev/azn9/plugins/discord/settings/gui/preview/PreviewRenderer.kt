@@ -513,6 +513,7 @@ private fun Data.completeMissingData(): Data.File {
         file?.filePath ?: "dummy/$dummyFileName",
         file?.fileIsWriteable ?: true,
         file?.editorIsTextEditor ?: false,
+        file?.isDiffEditor ?: false,
         file?.caretLine ?: 0,
         file?.lineCount ?: 0,
         file?.moduleName ?: "dummy-module",
