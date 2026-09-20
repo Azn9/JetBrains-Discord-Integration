@@ -81,6 +81,11 @@ interface ApplicationSettings : PersistentStateComponent<Element>, OptionHolder 
     val fileIconSmallTextCustom: TemplateValue
     val fileTime: TimeValue
 
+    val button1Text: StringValue
+    val button1Url: StringValue
+    val button2Text: StringValue
+    val button2Url: StringValue
+
     val applicationType: ApplicationTypeValue
 
     val applicationTheme: ThemeValue

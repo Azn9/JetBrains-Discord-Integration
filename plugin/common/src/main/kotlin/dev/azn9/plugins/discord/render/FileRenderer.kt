@@ -39,10 +39,10 @@ class FileRenderer(context: RenderContext) : Renderer(context) {
             smallIconText = settings.fileIconSmallText,
             smallIconTextCustom = settings.fileIconSmallTextCustom,
             startTimestamp = settings.fileTime,
-            button1Title = projectSettings.button1Title.getValue(),
-            button1Url = projectSettings.button1Url.getValue(),
-            button2Title = projectSettings.button2Title.getValue(),
-            button2Url = projectSettings.button2Url.getValue()
+            button1Title = projectSettings.button1Title.getValue().ifBlank { settings.button1Text.getValue() },
+            button1Url = projectSettings.button1Url.getValue().ifBlank { settings.button1Url.getValue() },
+            button2Title = projectSettings.button2Title.getValue().ifBlank { settings.button2Text.getValue() },
+            button2Url = projectSettings.button2Url.getValue().ifBlank { settings.button2Url.getValue() }
         )
     }
 }
