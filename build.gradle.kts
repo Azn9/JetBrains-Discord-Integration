@@ -84,7 +84,7 @@ tasks {
         }
     }
 
-    create<Delete>("clean") {
+    register("clean", Delete::class) {
         group = "build"
 
         val regex = Regex("""JetBrains-Discord-Integration-\d+.\d+.\d+(?:\+\d+)?.zip""")
@@ -96,12 +96,12 @@ tasks {
         delete(project.layout.buildDirectory)
     }
 
-    create("default") {
+    register("default") {
         val buildPlugin = project.tasks.getByPath("plugin:buildPlugin")
         dependsOn(buildPlugin)
     }
 
-    create<Delete>("clean-sandbox") {
+    register("clean-sandbox", Delete::class) {
         group = "build"
 
         delete(project.file(".sandbox"))

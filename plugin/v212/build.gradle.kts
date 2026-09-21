@@ -45,6 +45,8 @@ dependencies {
 
     antlr(libs.antlr)
     implementation(libs.antlr.runtime)
+
+    testImplementation(libs.kotlin.test)
 }
 
 repositories {
@@ -53,7 +55,7 @@ repositories {
     maven("https://jitpack.io")
 
     mavenLocal()
-    maven("https://nexus.azn9.dev/repository/public")
+    maven("https://nexus.azn9.dev/repository/maven-public")
 }
 
 val generatedSourceDir = project.file("src/generated")
@@ -67,13 +69,11 @@ sourceSets {
     }
 }
 
-val isCI = System.getenv("CI") != null
-
 intellij {
     pluginName.set(properties("pluginName").get())
 
     version(libs.versions.ide.v212)
-    downloadSources(!isCI)
+    downloadSources(System.getenv("CI") == null)
     sandboxDir("${project.rootDir.absolutePath}/.sandbox.v212")
 
     updateSinceUntilBuild(false)
@@ -123,9 +123,6 @@ testing {
                 }
             }
 
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
             project.tasks {
                 compileTestKotlin {
                     dependsOn(generateTestGrammarSource)
