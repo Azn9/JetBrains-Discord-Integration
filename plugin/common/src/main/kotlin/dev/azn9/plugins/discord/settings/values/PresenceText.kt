@@ -91,6 +91,17 @@ enum class PresenceText(override val text: String, override val description: Str
     FILE_NAME("File Name", "Only shows the file name even when there are multiple open files with the same name") {
         override fun RenderContext.getResult() = fileData?.let { getPrefix(fileData) + fileData.fileName }.toResult()
     },
+    FILE_LINE_COUNT("File Line Count") {
+        override fun RenderContext.getResult(): Result {
+            return when {
+                fileData?.editorIsTextEditor -> {
+                    val count = fileData.lineCount
+                    "$count ${if (count == 1) "line" else "lines"}".toResult()
+                }
+                else -> Result.Empty
+            }
+        }
+    },
     FILE_LANGUAGE("File Language") {
         override fun RenderContext.getResult() = language?.name.toResult()
     },
@@ -140,6 +151,7 @@ enum class PresenceText(override val text: String, override val description: Str
             PROJECT_NAME_VCS_BRANCH,
             FILE_NAME_PATH,
             FILE_NAME,
+            FILE_LINE_COUNT,
             FILE_LANGUAGE,
             CUSTOM
         )
@@ -154,6 +166,7 @@ enum class PresenceText(override val text: String, override val description: Str
             PROJECT_NAME_VCS_BRANCH,
             FILE_NAME_PATH,
             FILE_NAME,
+            FILE_LINE_COUNT,
             FILE_LANGUAGE,
             CUSTOM
         )
@@ -168,6 +181,7 @@ enum class PresenceText(override val text: String, override val description: Str
             PROJECT_NAME_VCS_BRANCH,
             FILE_NAME_PATH,
             FILE_NAME,
+            FILE_LINE_COUNT,
             FILE_LANGUAGE,
             CUSTOM
         )
@@ -182,6 +196,7 @@ enum class PresenceText(override val text: String, override val description: Str
             PROJECT_NAME_VCS_BRANCH,
             FILE_NAME_PATH,
             FILE_NAME,
+            FILE_LINE_COUNT,
             FILE_LANGUAGE,
             CUSTOM
         )
