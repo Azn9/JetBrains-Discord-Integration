@@ -19,7 +19,7 @@ logback = "1.5.6"
 okhttp3 = "4.12.0"
 pngtastic = "1.7"
 shadow = "8.1.1"
-versions = "0.51.0"
+versions = "0.54.0"
 zeroAllocationHashing = "0.26ea0"
 
 ide-common = "2021.2" # Lower bound for all IDE versions
